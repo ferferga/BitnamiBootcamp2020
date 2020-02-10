@@ -1,0 +1,14 @@
+version: '3'
+services:
+  mysqldump:
+    image: bitnami/mariadb
+    command: bash -c 'mysqldump -h mariadb -uroot -proot --all-databases > /database_backup/all_backup.sql'
+    environment:
+      ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+      - ./database_backup:/database_backup
+    networks:
+      - 'ferferga_wordpress-compose'
+networks:
+  ferferga_wordpress-compose:
+    external: true
