@@ -70,7 +70,7 @@ Before starting, we need to login into docker ``docker login --username=ferferga
 
 Then, we run ``docker push ferferga/kong``.
 
-My image is live at [Docker Hub](https://hub.docker.com/repository/docker/ferferga/kong)
+My image is live at [Docker Hub](https://hub.docker.com/r/ferferga/kong)
 
 ### Exercise 8
 **Find the way to “rename” an existing image (without docker commit)**
