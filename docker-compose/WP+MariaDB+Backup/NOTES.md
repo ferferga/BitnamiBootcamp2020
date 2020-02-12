@@ -1,1 +1,0 @@
-* We must create the ``database_backup`` folder ourselves and assign it permissions for everybody (``chmod -R 777 database_backup``)
