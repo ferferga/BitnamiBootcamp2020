@@ -1,4 +1,6 @@
-* We have created our own docker image with 4 helper scripts:
+## Introduction
+
+We have created our own docker image with 4 helper scripts:
 
 ```
 postunpack.sh
@@ -15,4 +17,10 @@ run.sh
 
 ``run.sh`` is called by the entrypoint to start the nginx process.
 
-There is also a docker-compose.yaml to orchestrate the build and runtime of the container in a single command.
+## How to
+
+1. Download all the files from this folder and place it in a folder where you have permissions in your system.
+2. ``cd`` to that directory.
+3. Run ``docker-compose up``. Your website will be up and running in a minute, so enjoy!
+
+Run ``docker-compose down -V`` to kill the container and remove the associated data.

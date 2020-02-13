@@ -29,4 +29,3 @@ We must pass ``--no-cache`` arguments to the ``docker build`` command.
 
 The ``build: .`` directive in ``docker-compose.yaml`` will build the ``Dockerfile`` located in the same directory of the ``yaml``.
 We can specify any Dockerfile by its absolute or relative path there without any problem.
-

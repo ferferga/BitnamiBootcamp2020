@@ -1,7 +1,12 @@
-FROM bitnami/golang AS builder
-RUN mkdir /hugo && git clone https://github.com/gohugoio/hugo && cd hugo && go build -o /hugo/hugo.go && cd /hugo \
-    && mv hugo.go hugo && git clone https://github.com/alemorcuq/hugo-sample-site && mv hugo-sample-site/* . && rm -rf hugo-sample-site
+FROM bitnami/git AS downloader
+WORKDIR /
+RUN mkdir hugo && git clone https://github.com/gohugoio/hugo && cd hugo && git clone https://github.com/alemorcuq/hugo-sample-site \
+&& mv hugo-sample-site/* . && rm -rf hugo-sample-site
 
+FROM bitnami/golang:1.13 AS builder
+COPY --from=downloader /hugo /hugo
+WORKDIR /hugo
+RUN  go build
 
 FROM bitnami/minideb AS generator
 COPY --from=builder /hugo /hugo
@@ -25,15 +30,16 @@ RUN cd ${NGINX_VERSION} && ./configure --prefix=/app/nginx/data --with-pcre=../$
     --build=ferferga --with-debug && make -j$$$(nproc) && make install
 
 FROM bitnami/minideb
-ARG NGINX_PORT=8080
-ENV NGINX_PORT "8080"
-ENV PATH "/app/nginx/bin:$PATH"
+ENV NGINX_PORT=8080 PATH="/app/nginx/bin:$PATH"
 COPY --from=nginx_builder /app /app
 COPY ./*.sh /scripts/
-RUN rm -rf /app/nginx/data/html/*
+WORKDIR /scripts
+RUN rm -rf /app/nginx/data/html/* && chown root:root postunpack.sh && chmod ug+x postunpack.sh
 COPY --from=generator /hugo/public /app/nginx/data/html
-RUN /scripts/postunpack.sh
-EXPOSE ${NGINX_PORT}
+RUN ./postunpack.sh
+RUN chown nginx:root * && chmod ug+x * && chown root:root postunpack.sh && chmod ug+x postunpack.sh
 WORKDIR /app/nginx/data
+EXPOSE ${NGINX_PORT}
+USER nginx
 ENTRYPOINT [ "/scripts/entrypoint.sh" ]
 CMD [ "/scripts/run.sh" ]

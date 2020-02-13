@@ -1,2 +1,0 @@
-* We can run the ``docker image prune`` command to remove the intermediate ``builder`` and ``generator`` images.
-* I tried running from scratch, but hugo depends still in some ``bash`` builtins like ``cd`` to work.

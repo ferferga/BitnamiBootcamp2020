@@ -29,8 +29,8 @@ to apply it to the parent image as well.
 
 This instruction defines the exit signal that will be sent to the container running this image to exit.
 
-This instruction could be useful for helping us in the process of debugging issues with containers, as we set a custom (but known and expected to us) signal that we can handle
-in an specific scenario.
+This instruction could be useful for helping us in the process of debugging issues with containers,
+as we set a custom (but known and expected to us) signal that we can handle in an specific scenario.
 
 ## HEALTHCHECK
 
@@ -61,4 +61,3 @@ This instruction is necessary and helpful for a good Continuos Integration and a
 This instruction allows us to change the shell used. In Linux and Mac, the default one is ``sh`` (which we can override with ``bash`` if we're running special instructions not available in ``sh``, for example).
 
 This instruction, although not that necessary in UNIX environments, it's mostly essentials in Windows containers, as there are two shells: ``cmd`` and ``powershell``.
-
