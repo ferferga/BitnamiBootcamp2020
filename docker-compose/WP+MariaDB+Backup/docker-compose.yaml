@@ -1,0 +1,17 @@
+version: '3'
+services:
+  mysqldump:
+    image: bitnami/mariadb
+    command: bash -c 'mysqldump -h $$MARIADB_HOST -u$$MARIADB_USER -p$$MARIADB_PASSWORD --all-databases > /database_backup/all_backup-$$(date +%Y-%m-%d-%H.%M.%S).sql'
+    environment:
+      ALLOW_EMPTY_PASSWORD: 'yes'
+      MARIADB_HOST: 'mariadb'
+      MARIADB_USER: 'root'
+      MARIADB_PASSWORD: 'root'
+    volumes:
+      - ./database_backup:/database_backup
+    networks:
+      - 'ferferga_wordpress-compose'
+networks:
+  ferferga_wordpress-compose:
+    external: true

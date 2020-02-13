@@ -1,0 +1,62 @@
+version: '3'
+services:
+  mariadb:
+    image: bitnami/mariadb:10.1
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: wordpress
+    volumes:
+      - 'mariadb_data:/bitnami/mariadb'
+    networks:
+      - 'wordpress-compose'
+      - 'joomla-compose'
+  wordpress:
+    container_name: myfirstwp.net.proxy
+    image: bitnami/wordpress
+    depends_on: 
+      - 'mariadb'
+      - 'proxy'
+    networks:
+      - wordpress-compose
+    environment:
+      MARIADB_HOST: mariadb
+      WORDPRESS_DATABASE_NAME: wordpress
+      WORDPRESS_DATABASE_USER: root
+      WORDPRESS_DATABASE_PASSWORD: root
+  proxy:
+    container_name: proxy
+    image: shroomlife/docker-https-proxy:latest
+    networks:
+      - joomla-compose
+      - wordpress-compose
+    ports:
+      - "80:80"
+      - "443:443"
+  joomla:
+    container_name: myjoomla.net.proxy
+    image: bitnami/joomla
+    networks:
+      - joomla-compose
+    depends_on:
+      - 'mariadb'
+      - 'proxy'
+    environment:
+      MARIADB_HOST: mariadb
+      MARIADB_ROOT_USER: root
+      MARIADB_ROOT_PASSWORD: root
+      MYSQL_CLIENT_CREATE_DATABASE_NAME: joomla
+      MYSQL_CLIENT_CREATE_DATABASE_USER: root
+      MYSQL_CLIENT_CREATE_DATABASE_PASSWORD: root
+      JOOMLA_DATABASE_NAME: joomla
+      JOOMLA_DATABASE_USER: root
+      JOOMLA_DATABASE_PASSWORD: root
+volumes:
+  mariadb_data:
+    driver: local
+  nginx_config:
+    driver: local
+networks:
+  wordpress-compose:
+    driver: bridge
+  joomla-compose:
+    driver: bridge
