@@ -1,0 +1,9 @@
+version: '3'
+services:
+  hugo_nginx_source:
+    build: .
+    environment:
+      NGINX_PORT: '8080'
+    ports:
+        - "90:8080"
+        
