@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ferferga-ckan.fullname" . }}
+  labels:
+    {{- include "ferferga-ckan.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "ferferga-ckan.fullname" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

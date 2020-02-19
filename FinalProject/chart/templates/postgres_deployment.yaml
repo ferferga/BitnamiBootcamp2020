@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ferferga-ckan.fullname" . }}-postgres
+  labels:
+    app: {{ include "ferferga-ckan.fullname" . }}-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "ferferga-ckan.fullname" . }}-postgres
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "ferferga-ckan.fullname" . }}-postgres
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: postgres
+          image: bitnami/postgresql:11
+          env:          
+            {{- range .Values.postgresenv }}
+            - name: {{ .name }}
+              value: {{ .value | quote}}
+          {{- end }}
+          ports:
+            - name: postgres-port
+              containerPort: 5432

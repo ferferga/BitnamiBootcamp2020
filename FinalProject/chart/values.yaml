@@ -1,0 +1,105 @@
+# Default values for ferferga-ckan.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ferferga/ckan
+  pullPolicty: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "ferferga-ckan"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+readinessdelay: 100
+livenessperiod: 100
+
+ckanenv:
+  - name: "CKAN_INITIALIZE_DB"
+    value: "yes"
+  - name: "POSTGRESQL_ROOT_PASSWORD"
+    value: "bitnamiadmin123"
+  - name: "REDIS_USER"
+    value: "root"
+  - name: "REDIS_PASSWORD"
+    value: "bitnamiadmin123"
+  - name: "REDIS_URL"
+    value: "ferferga-ckan-redis:6379"
+  - name: "SOLR_CORE_NAME"
+    value: "solr/ckan-core"
+  - name: "MEMCACHED_URL"
+    value: "ferferga-ckan-memcached:11211"
+  - name: "CKAN_STORAGE_PATH"
+    value: "/data/storage"
+  - name: "CKAN_URL"
+    value: 'ferferga.ckan.com'
+  - name: "POSTGRESQL_HOST"
+    value: 'ferferga-ckan-postgres'
+  - name: "SOLR_URL"
+    value: "ferferga-ckan-solr:8983"
+
+postgresenv:
+  - name: "POSTGRESQL_PASSWORD"
+    value: 'bitnamiadmin123'
+
+redisenv:
+  - name: "REDIS_USER"
+    value: "root"
+  - name: "REDIS_PASSWORD"
+    value: 'bitnamiadmin123'
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 101
+
+service:
+  type: NodePort
+  port: 90
+
+ingress:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: ferferga.ckan.com
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

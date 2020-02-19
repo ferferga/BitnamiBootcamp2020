@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ferferga-ckan.fullname" . }}-postgres
+  labels:
+    {{- include "ferferga-ckan.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      targetPort: postgres-port
+      name: postgres-port
+  selector:
+    app.kubernetes.io/name: {{ include "ferferga-ckan.fullname" . }}-postgres
+    app.kubernetes.io/instance: {{ .Release.Name }}
