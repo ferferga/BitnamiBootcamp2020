@@ -15,9 +15,9 @@ mkdir -p $CKAN_STORAGE_PATH
 chown -R ckan:ckan $CKAN_CONF_PATH
 chown -R ckan:ckan /src/ckan/
 chown -R ckan:ckan $CKAN_STORAGE_PATH
-chmod -R 770 $CKAN_CONF_PATH
-chmod -R 770 /src/ckan/
-chmod -R 770 $CKAN_STORAGE_PATH
+chmod -R 550 $CKAN_CONF_PATH
+chmod -R 550 /src/ckan/
+chmod -R 550 $CKAN_STORAGE_PATH
 
 ## Symlinking logs to stdout and stderr
 ln -sf /dev/stdout /var/log/supervisor/supervisord.log

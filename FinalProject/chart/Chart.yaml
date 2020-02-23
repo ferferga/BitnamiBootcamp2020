@@ -1,6 +1,20 @@
 apiVersion: v2
 name: ferferga-ckan
 description: A CKAN Helm chart for Kubernetes
+dependencies:
+  - name: postgresql
+    version: 8.4.0
+    repository: https://charts.bitnami.com/bitnami/
+    condition: postgresql.enabled
+  - name: redis
+    version: 10.5.3
+    repository: https://charts.bitnami.com/bitnami/
+    condition: redis.enabled
+  - name: memcached
+    version: 4.2.6
+    repository: https://charts.bitnami.com/bitnami/
+    condition: memcached.enabled
+
 keywords:
   - postgresql
   - postgres
@@ -24,8 +38,8 @@ sources:
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 0.1.0
+version: 1.0
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
-appVersion: 'latest'
+appVersion: 2.8.2

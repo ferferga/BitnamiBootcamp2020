@@ -24,10 +24,10 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:          
-            {{- range .Values.ckanenv }}
+          {{- range .Values.ckanenv }}
             - name: {{ .name }}
               value: {{ .value | quote }}
           {{- end }}
