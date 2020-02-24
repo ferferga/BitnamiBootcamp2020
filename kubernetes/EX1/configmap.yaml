@@ -4,5 +4,5 @@ metadata:
   namespace: exercise1
   name: wp-maria-config
 data:
-    db.host: wp-db
-    db.name: wordpress
+  db.host: wp-db
+  db.name: wordpress
