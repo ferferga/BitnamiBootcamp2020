@@ -18,19 +18,11 @@ spec:
       containers:
         - image: bitnami/mariadb
           name: wp-db
-          env:
-            - name: MARIADB_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: wp-mariadb-secretdata
-                  key: db_password
-            - name: BITNAMI_DEBUG
-              value: 'true'
-            - name: MARIADB_DATABASE
-              valueFrom:
-                configMapKeyRef:
-                  name: wp-maria-config
-                  key: db.name
+          envFrom:
+            - configMapRef:
+                name: wp-maria-config
+            - secretRef:
+                name: wp-mariadb-secretdata
           ports:
             - name: database-conn
               containerPort: 3306

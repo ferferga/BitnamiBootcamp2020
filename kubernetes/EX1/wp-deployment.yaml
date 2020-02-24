@@ -29,41 +29,8 @@ spec:
           ports:
             - name: http-server
               containerPort: 80
-          env:
-            - name: MARIADB_ROOT_USER
-              valueFrom:
-                secretKeyRef:
-                  name: wp-mariadb-secretdata
-                  key: db_user
-            - name: MARIADB_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: wp-mariadb-secretdata
-                  key: db_password
-            - name: WORDPRESS_DATABASE_USER
-              valueFrom:
-                secretKeyRef:
-                  name: wp-mariadb-secretdata
-                  key: db_user
-            - name: WORDPRESS_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: wp-mariadb-secretdata
-                  key: db_password
-            - name: MARIADB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: wp-maria-config
-                  key: db.host
-            - name: WORDPRESS_DATABASE_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: wp-maria-config
-                  key: db.name
-            - name: MYSQL_CLIENT_CREATE_DATABASE_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: wp-maria-config
-                  key: db.name
-            - name: BITNAMI_DEBUG
-              value: 'true'
+          envFrom:
+            - configMapRef:
+                name: wp-maria-config
+            - secretRef:
+                name: wp-mariadb-secretdata
