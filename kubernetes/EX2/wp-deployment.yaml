@@ -33,8 +33,6 @@ spec:
           resources:
             limits:
               memory: "2048Mi"
-          # command: ["/bin/bash"]
-          # args: ["-c", "'mkdir /download && cd /download && curl https://downloads.wordpress.org/plugin/hyperdb.1.6.zip && unzip hyperdb.1.6.zip && cd hyperdb && mv *.php /opt/bitnami/wordpress/wp-content/plugins && rm -rf /download'"]
           env:
             - name: MARIADB_ROOT_USER
               valueFrom:
@@ -73,3 +71,27 @@ spec:
                   key: db.name
             - name: BITNAMI_DEBUG
               value: 'true'
+          volumeMounts:
+            - name: plugin-data
+              mountPath: /bitnami/wordpress/wp-content/plugins
+      initContainers:
+        - name: config-data
+          image: bitnami/minideb
+          command:
+            - 'bash'
+            - '-c'
+            - |
+              install_packages unzip wget ca-certificates
+              wget https://downloads.wordpress.org/plugin/hyperdb.1.6.zip
+              unzip hyperdb.1.6.zip
+              cd hyperdb
+              mv *.php /mountpoint/plugin
+              exit
+          volumeMounts:
+            - name: plugin-data
+              mountPath: /mountpoint/plugin
+      volumes:
+        - name: plugin-data
+          hostPath: 
+            path: /var/lib/minikube/hyperdb-volume
+            type: Directory
