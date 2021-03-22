@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: exercise1
+  name: wp-maria-config
+data:
+  MARIADB_HOST: wp-db
+  MARIADB_DATABASE: wordpress
+  WORDPRESS_DATABASE_NAME: wordpress
+  MYSQL_CLIENT_CREATE_DATABASE_NAME: wordpress
