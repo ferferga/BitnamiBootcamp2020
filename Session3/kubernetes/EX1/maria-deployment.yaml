@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wp-db
+  namespace: exercise1
+spec:
+  selector:
+    matchLabels:
+      app: wp-db
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: wp-db
+        track: stable
+    spec:
+      containers:
+        - image: bitnami/mariadb
+          name: wp-db
+          envFrom:
+            - configMapRef:
+                name: wp-maria-config
+            - secretRef:
+                name: wp-mariadb-secretdata
+          ports:
+            - name: database-conn
+              containerPort: 3306
