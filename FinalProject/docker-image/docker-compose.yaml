@@ -1,0 +1,71 @@
+version: '3'
+services:
+  ckan:
+    build: .
+    environment:
+      CKAN_INITIALIZE_DB: 'yes'
+      POSTGRESQL_ROOT_PASSWORD: 'bitnamiadmin123'
+      REDIS_USER: 'root'
+      REDIS_PASSWORD: 'bitnamiadmin123'
+      REDIS_URL: 'redis:6379'
+      SOLR_CORE_NAME: 'solr/ckan-core'
+      MEMCACHED_URL: 'memcached:11211'
+      CKAN_STORAGE_PATH: '/data/storage'
+    ports:
+        - "5000:5000"
+    networks:
+      - ckan
+    depends_on:
+      - postgres
+      - solr
+      - redis
+      - memcached
+    volumes:
+      - 'ckan-persistence:/data/storage'
+  postgres:
+    image: bitnami/postgresql:11
+    environment:
+      POSTGRESQL_PASSWORD: 'bitnamiadmin123'
+    volumes:
+      - 'postgresql-persistence:/bitnami/postgresql'
+    networks:
+      - 'ckan'
+  solr:
+    image: 'miguelaeh/solr'
+    command:
+      - 'bash'
+      - '-c'
+      - |
+        . /opt/bitnami/base/functions
+        . /opt/bitnami/base/helpers
+        nami_initialize solr
+        curl>'/tmp/ckan-core.tar.gz' 'http://apps-tests-artifacts.s3.amazonaws.com/ckan-core.tar.gz'
+        tar xzf /tmp/ckan-core.tar.gz -C /opt/bitnami/solr/server/solr
+        /opt/bitnami/solr/bin/solr -p 8983 -d /opt/bitnami/solr/server -f -force
+    networks:
+      - 'ckan'
+    ports:
+      - 8983:8983
+  redis:
+    image: 'bitnami/redis'
+    volumes:
+      - 'redis-persistence:/bitnami/redis/data'
+    environment:
+      REDIS_USER: 'root'
+      REDIS_PASSWORD: 'bitnamiadmin123'
+    networks:
+      - 'ckan'
+  memcached:
+    image: 'bitnami/memcached'
+    networks:
+      - 'ckan'
+networks:
+  ckan:
+    driver: bridge
+volumes:
+  postgresql-persistence:
+    driver: local
+  redis-persistence:
+    driver: local
+  ckan-persistence:
+    driver: local
