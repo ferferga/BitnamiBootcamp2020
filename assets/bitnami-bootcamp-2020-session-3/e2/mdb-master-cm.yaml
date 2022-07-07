@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mdb-config
+  namespace: exercise2
+data:
+  MARIADB_REPLICATION_MODE: master
+  MARIADB_REPLICATION_USER: replica
+  MARIADB_REPLICATION_PASSWORD: alucard
+  MARIADB_USER: bn_wordpress
+  MARIADB_PASSWORD: wp_password
+  MARIADB_DATABASE: bitnami_wordpress

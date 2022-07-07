@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mdb-slave-config
+  namespace: exercise2
+data:
+    MARIADB_REPLICATION_MODE: slave
+    MARIADB_REPLICATION_USER: replica
+    MARIADB_REPLICATION_PASSWORD: alucard
+    MARIADB_MASTER_HOST: mariadb
+    MARIADB_MASTER_PORT_NUMBER: "3306"
+    BITNAMI_DEBUG: "true" ## powered by Juan Ariza

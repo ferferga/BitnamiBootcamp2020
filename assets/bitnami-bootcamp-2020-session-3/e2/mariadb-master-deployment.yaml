@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+  namespace: exercise2
+  labels:
+    app: mariadb
+    tier: backend
+    role: master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+      role: master
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: mariadb
+        role: master
+        tier: backend
+    spec:
+      containers:
+        - name: mariadb
+          image: bitnami/mariadb:10.3
+          ports:
+            - name: database-port
+              containerPort: 3306
+          env:
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: MARIADB_ROOT_PASSWORD
+                  name: mdb-secrets
+          envFrom:
+            - configMapRef:
+                name: mdb-config
+          readinessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 60 # Just for preventing rebooting the container too soon!
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 60
+            periodSeconds: 20
+          resources:
+            limits:
+              cpu: 0.5
+            requests:
+              cpu: 0.2

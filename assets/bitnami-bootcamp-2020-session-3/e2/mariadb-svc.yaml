@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb
+  labels:
+    app: mariadb
+    tier: backend
+spec:
+  ports:
+    - port: 3306
+      targetPort: database-port
+  selector:
+    tier: backend
+  type: ClusterIP

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mdb-config
+  namespace: exercise1
+data:
+    MARIADB_USER: bn_wordpress
+    MARIADB_PASSWORD: wp_password
+    MARIADB_DATABASE: bitnami_wordpress
+    BITNAMI_DEBUG: "true" ## powered by Juan Ariza
+
